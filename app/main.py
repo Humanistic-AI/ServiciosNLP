@@ -1,11 +1,6 @@
 from fastapi import FastAPI
+from app.api.health import router as health_router
 
-app = FastAPI()
+app = FastAPI(title="Servicios NLP")
 
-@app.get("/")
-def root():
-    return {"message": "Hello, AI Engineer"}
-
-@app.get("/hello")
-def new():
-    return {"message": "Hello, Maxi!"}
+app.include_router(health_router)
