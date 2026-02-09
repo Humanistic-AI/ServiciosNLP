@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 from pydantic import BaseModel
 
-from app.core.word_count import count_words
+from core.word_count import count_words
 
 router = APIRouter()
 

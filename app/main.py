@@ -1,6 +1,6 @@
 from fastapi import FastAPI
-from app.api.health import router as health_router
-from app.api.word_count import router as word_count_router
+from api.health import router as health_router
+from api.word_count import router as word_count_router
 
 app = FastAPI(title="Servicios NLP")
 
