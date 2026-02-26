@@ -17,5 +17,5 @@ COPY ./app /code/app
 
 # Este comando es el que se ejecutará cuando se inicie el contenedor.
 #CMD ["fastapi", "run", "app/main.py", "--port", "80"]
-WORKDIR /code/app
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "80"]
+WORKDIR /code
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "80"]

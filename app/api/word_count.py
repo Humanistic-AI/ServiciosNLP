@@ -4,7 +4,7 @@ import uuid
 from fastapi import HTTPException   
 from fastapi.responses import FileResponse
 
-from core.word_count import count_words
+from app.core.word_count import count_words
 
 router = APIRouter()
 datadir = "/tmp/"
