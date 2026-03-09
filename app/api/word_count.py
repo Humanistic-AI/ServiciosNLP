@@ -3,6 +3,7 @@ from pydantic import BaseModel
 import uuid
 from fastapi import HTTPException   
 from fastapi.responses import FileResponse
+from fastapi import BackgroundTasks
 
 from app.core.word_count import count_words
 from app.core.export import export_counts_to_csv
@@ -11,8 +12,7 @@ router = APIRouter()
 datadir = "/tmp/"
 
 
-#ToDo: que se quiten los signos de puntuación, y que se manejen mayúsculas y minúsculas como iguales
-#ToDo: quitar las stopswords
+
 
 class WordCountRequest(BaseModel):
     text: str
@@ -25,7 +25,9 @@ def word_count(req: WordCountRequest):
     counts = count_words(req.text)
 
     filename = datadir + "result_" + request_id + ".csv"
-    export_counts_to_csv(counts, filename)
+    
+    # export_counts_to_csv(counts, filename)
+    background_tasks.add_task(export_counts_to_csv, counts, filename)
 
     return {"request_id": request_id, "message":"regresa más tarde para ver si está tu resultado"}
 
