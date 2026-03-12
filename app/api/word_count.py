@@ -11,15 +11,12 @@ from app.core.export import export_counts_to_csv
 router = APIRouter()
 datadir = "/tmp/"
 
-
-
-
 class WordCountRequest(BaseModel):
     text: str
 
 #ToDo cambiar para que maneje file uploads
 @router.post("/word-count")
-def word_count(req: WordCountRequest):
+def word_count(req: WordCountRequest, background_tasks: BackgroundTasks):
     request_id = str(uuid.uuid4())
 
     counts = count_words(req.text)
