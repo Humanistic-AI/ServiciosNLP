@@ -38,6 +38,11 @@ Once running, open your browser at:
 API documentation (Swagger UI):
 `http://127.0.0.1:8000/docs`
 
+### Development mode in docker
+
+1.  Build `docker build -t nlpservices . `
+2.  Launch with hot reload ` docker run --rm -p 8000:80 -v ./app:/code/app  -it nlpservices uvicorn main:app --host 0.0.0.0 --port 80 --reload`
+
 ### Production-like mode
 
 Runs the server exposed to the network (no auto-reload):
