@@ -1,4 +1,4 @@
-# 💬 ServiciosNLP
+# ServiciosNLP
 
 ![Status](https://badgen.net/badge/status/in%20progress/yellow)
 ![Python](https://badgen.net/badge/Python/3.12/blue)
@@ -14,26 +14,26 @@ The project is designed to grow incrementally, starting with basic text processi
 
 ---
 
-## 📷 Screenshot
+## Screenshot
 <img width="950" height="882" alt="Word Counter" src="https://github.com/user-attachments/assets/679cc190-b5c4-49a9-8b14-7c8cf6a23130" />
 
 
 ---
 
-## 🔧 Features & Stack
+## Features & Stack
 
-- ⚡ REST API built with **FastAPI**
-- 📄 Automatic interactive documentation via **Swagger UI**
-- 🔤 Word frequency analysis with Spanish stopword filtering and text normalization
-- 📦 Results exported as downloadable **CSV files**
-- 🔁 Asynchronous task handling using **BackgroundTasks**
-- 🐳 Fully containerized with **Docker**
-- 🚀 Deployable to remote Linux servers
-- 🔀 Version-controlled with **Git & GitHub** using feature branches and pull requests
+- REST API built with **FastAPI**
+- Automatic interactive documentation via **Swagger UI**
+- Word frequency analysis with Spanish stopword filtering and text normalization
+- Results exported as downloadable **CSV files**
+- Asynchronous task handling using **BackgroundTasks**
+- Fully containerized with **Docker**
+- Deployable to any machine with Docker installed
+- Version-controlled with **Git & GitHub** using feature branches and pull requests
 
 ---
 
-## 🧪 Highlighted Technical Detail
+## Highlighted Technical Detail
 
 The word count service processes text asynchronously: when a request arrives, the API responds immediately with a unique `request_id` while the CSV export runs in the background. The client can then poll a `/status/{request_id}` endpoint and download the result via `/results/{request_id}` once it's ready.
 
@@ -41,7 +41,7 @@ This pattern simulates a real-world async job queue and demonstrates FastAPI's d
 
 ---
 
-## 🧠 Concepts Explored
+## Concepts Explored
 
 - Building modular REST APIs with **FastAPI routers**
 - Input validation and schema definition using **Pydantic**
@@ -50,12 +50,12 @@ This pattern simulates a real-world async job queue and demonstrates FastAPI's d
 - Text normalization and Spanish stopword filtering with **regex**
 - CSV export from Python dictionaries
 - Containerization with **Docker** and hot reload in development
-- Remote server deployment on Linux
+- Remote server deployment with Docker
 - Git branching workflow with feature branches and pull requests
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 ```bash
 app/
 ├── main.py              → FastAPI entry point, router registration
@@ -69,7 +69,7 @@ app/
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Requirements
 
@@ -95,7 +95,7 @@ Open in your browser:
 docker build -t nlpservices .
 
 # Run with hot reload
-docker run --rm -p 8000:80 -v ./app:/code/app -it nlpservices uvicorn app.main:app --host 0.0.0.0 --port 80 --reload
+docker run --rm -p 8000:80 -v ./app:/code/app -it nlpservices
 ```
 
 ### Run with Docker (production-like mode)
@@ -105,25 +105,25 @@ docker run --rm -p 8000:80 nlpservices
 
 ### Deploy to a remote server
 
-This project is fully containerized and can be deployed to any Linux server with Docker installed. Clone the repository, build the image, and run the container exposing the desired port.
+This project is fully containerized and can be deployed to any machine with Docker installed. Clone the repository, build the image, and run the container exposing the desired port.
 
 ---
 
-## 🚧 Roadmap
+## Roadmap
 
-- ✅ Project structure with FastAPI routers
-- ✅ Health check endpoint
-- ✅ Word count service with CSV export and async processing
-- ⏳ Basic Named Entity Recognition (NER)
-- ⏳ Document clustering
-- ⏳ Sentence classification
-- ⏳ Paragraph clustering
-- ⏳ File upload support (TXT, PDF)
-- ⏳ LLM integration
+- [x] Project structure with FastAPI routers
+- [x] Health check endpoint
+- [x]  Word count service with CSV export and async processing
+- [ ]  Basic Named Entity Recognition (NER)
+- [ ] Document clustering
+- [ ] Sentence classification
+- [ ] Paragraph clustering
+- [ ] File upload support (TXT, PDF)
+- [ ] LLM integration
 
 ---
 
-## 🤝 Contact
+## Contact
 
 - [GitHub](https://github.com/franciscoxcode)
 - [LinkedIn](https://www.linkedin.com/in/franciscoxcode/)
@@ -131,7 +131,6 @@ This project is fully containerized and can be deployed to any Linux server with
 
 ---
 
-## 📄 License
+## License
 
-This project is open for exploration.  
-Feel free to clone or adapt the code for your own projects.
+This project is licensed under the [GNU Affero General Public License v3.0](LICENSE).
