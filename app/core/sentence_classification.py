@@ -89,6 +89,6 @@ def process_text(text: str, classes: list, filename: str) -> str:
     Returns the filename of the generated Excel.
     """
     sentences = split_into_sentences(text)
-    results = classify_sentences(sentences, classes)
+    results = classify_sentences(sentences, classes)["results"]
     export_to_excel(results, classes, filename)
     return filename
