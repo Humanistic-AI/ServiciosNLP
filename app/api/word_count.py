@@ -46,3 +46,4 @@ def get_results(request_id: str):
         return FileResponse(filename, media_type='application/octet-stream',filename=filename)
     except RuntimeError:
         raise HTTPException(status_code=404, detail="Resultado no encontrado")
+    
