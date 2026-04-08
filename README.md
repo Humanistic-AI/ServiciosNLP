@@ -9,7 +9,7 @@
 
 ServiciosNLP is an educational backend platform built with **Python** and **FastAPI**.
 
-It provides NLP-based services for humanities researchers — including word frequency analysis, sentence classification, and document clustering — through a clean, documented REST API.
+It provides NLP-based services for humanities researchers, including word frequency analysis, sentence classification, and document clustering, through a clean, documented REST API.
 
 The project grows incrementally, starting with basic text processing and progressively integrating LLM-powered features via the OpenAI API.
 
@@ -88,12 +88,13 @@ app/
 This project requires a `.env` file at the root of the project to configure the OpenAI API key. This file is excluded from version control via `.gitignore` to protect sensitive credentials.
 
 > **Never commit your `.env` file to version control.** It contains secret keys that must remain private.
+> 
 
 ### 1. Create your .env file
 
 In the project root, create a file named `.env` with the following content:
 
-```env
+```
 OPENAI_API_KEY=your-api-key-here
 ```
 
@@ -101,11 +102,12 @@ Refer to `.env_example` (included in the repository) for the expected format.
 
 ### 2. Get your OpenAI API key
 
-- Create an account at [platform.openai.com](https://platform.openai.com)
+- Create an account at [platform.openai.com](https://platform.openai.com/)
 - Navigate to **API Keys** and generate a new key
 - Paste the key into your `.env` file
 
 > The sentence classification service will not function without a valid API key. All other services (word count, health check) work without it.
+> 
 
 ---
 
@@ -127,16 +129,17 @@ Open in your browser:
 
 ```bash
 docker build -t nlpservices .
-docker run --rm -p 8000:80 -v ./app:/code/app --env-file .env -it nlpservices
+docker run --rm -p 8000:80 -v ./app:/code/app -v ~/nltk_data:/root/nltk_data --env-file .env -it nlpservices
 ```
 
 ### Run with Docker — production
 
 ```bash
-docker run --rm -p 8000:80 --env-file .env nlpservices
+docker run --rm -p 8000:80 -v ~/nltk_data:/root/nltk_data --env-file .env nlpservices
 ```
 
 > The `--env-file .env` flag injects your environment variables into the container at runtime, so secrets never get baked into the Docker image.
+> 
 
 ---
 
@@ -148,14 +151,17 @@ This project is fully containerized. Clone the repository on any machine with Do
 
 ## Roadmap
 
-- [x] Project structure with FastAPI routers
-- [x] Health check endpoint
-- [x] Word count service with CSV export and async processing
-- [x] Sentence classification with OpenAI and Excel export
-- [ ] Named Entity Recognition (NER)
-- [ ] Document clustering
-- [ ] Paragraph clustering
-- [ ] File upload support (TXT, PDF)
+- [x]  Project structure with FastAPI routers
+- [x]  Health check endpoint
+- [x]  Word count service with CSV export and async processing
+- [x]  Sentence classification with OpenAI and Excel export
+- [x]  Docker volume for NLTK punkt_tab model persistence
+- [x]  CORS configuration
+- [ ]  Basic front-end
+- [ ]  Named Entity Recognition (NER)
+- [ ]  Document clustering
+- [ ]  Paragraph clustering
+- [ ]  File upload support (TXT, PDF)
 
 ---
 
@@ -169,4 +175,4 @@ This project is fully containerized. Clone the repository on any machine with Do
 
 ## License
 
-This project is licensed under the [GNU Affero General Public License v3.0](LICENSE).
+This project is licensed under the [GNU Affero General Public License v3.0](https://www.notion.so/LICENSE).
