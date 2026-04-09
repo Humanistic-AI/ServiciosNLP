@@ -1,9 +1,20 @@
 import { useState } from 'react'
 import type { HistoryItem } from './types'
 import HistoryPanel from './components/HistoryPanel'
+import TextPanel from './components/TextPanel'
 
 export default function App() {
   const [history, setHistory] = useState<HistoryItem[]>([])
+
+  function handleSubmit(item: HistoryItem) {
+    setHistory(prev => {
+      const exists = prev.find(i => i.request_id === item.request_id)
+      if (exists) {
+        return prev.map(i => i.request_id === item.request_id ? item : i)
+      }
+      return [item, ...prev]
+    })
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
@@ -15,9 +26,7 @@ export default function App() {
           </p>
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-4">
-          <div className="bg-white border border-gray-200 rounded-xl p-5">
-            <p className="text-sm text-gray-400">Panel de trabajo — próximamente</p>
-          </div>
+          <TextPanel onSubmit={handleSubmit} />
           <HistoryPanel items={history} />
         </div>
       </div>

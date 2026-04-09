@@ -16,28 +16,22 @@ def split_into_sentences(text: str) -> list:
     sentences = nltk.sent_tokenize(text.replace("\n", " "))
     return sentences
 
-def classify_sentences(sentences: list, classes: list) -> list:
+def classify_sentences(sentences: list, categories: list[str], examples: str) -> list:
     """
     Sends all sentences to OpenAI in a single request
     and returns the classified results.
     """
-    # Build the classes section of the system prompt
-    prompt_classes = ""
-    for clase in classes:
-        prompt_classes += f"\nClass: {clase['nombre']}\n"
-        prompt_classes += f"Description: {clase['descripcion']}\n"
-        prompt_classes += f"Examples: {clase['ejemplos']}\n"
+    categories_text = "\n".join(f"- {c}" for c in categories)
 
-    # Build the numbered list of sentences
     numbered_sentences = ""
     for i, sentence in enumerate(sentences):
         numbered_sentences += f"{i+1}. {sentence}\n"
 
     user_prompt = f"""
-Classify each of the following sentences according to the defined classes.
-Return ONLY a valid JSON with this format, no additional text:
-[{{"number": 1, "sentence": "text", "classes": ["class1"]}}, ...]
-If a sentence does not belong to any class, return "classes": [].
+        Classify each of the following sentences according to the defined categories.
+        Return ONLY a valid JSON object with this exact format, no additional text:
+        {{"classifications": [{{"number": 1, "sentence": "text", "classes": ["category1"]}}]}}
+        If a sentence does not belong to any category, return "classes": [].
 
 Sentences:
 {numbered_sentences}
@@ -45,8 +39,12 @@ Sentences:
 
     system_prompt = f"""
 You are a sentence classifier in Spanish.
-The available classes are:
-{prompt_classes}
+The available categories are:
+{categories_text}
+
+Examples to guide your classification:
+{examples}
+
 Respond ONLY with valid JSON, no explanations.
 """
 
@@ -61,34 +59,31 @@ Respond ONLY with valid JSON, no explanations.
 
     return json.loads(response.choices[0].message.content)
 
-def export_to_excel(results: list, classes: list, filename: str) -> str:
+def export_to_excel(results: list, categories: list[str], filename: str) -> str:
     """
     Converts classification results to an Excel file.
-    Returns the filename.
     """
     wb = openpyxl.Workbook()
     ws = wb.active
 
-    # Build header row
-    headers = ["sentence"] + [c["nombre"] for c in classes]
+    headers = ["sentence"] + categories
     ws.append(headers)
 
-    # Build data rows
     for item in results:
         row = [item["sentence"]]
-        for c in classes:
-            row.append(c["nombre"] in item["classes"])
+        for c in categories:
+            row.append(c in item["classes"])
         ws.append(row)
 
     wb.save(filename)
     return filename
 
-def process_text(text: str, classes: list, filename: str) -> str:
+def process_text(text: str, categories: list[str], examples: str, filename: str) -> str:
     """
     Main function that orchestrates the full classification pipeline.
-    Returns the filename of the generated Excel.
     """
     sentences = split_into_sentences(text)
-    results = classify_sentences(sentences, classes)["results"]
-    export_to_excel(results, classes, filename)
+    response = classify_sentences(sentences, categories, examples)
+    results = response["classifications"]    
+    export_to_excel(results, categories, filename)
     return filename

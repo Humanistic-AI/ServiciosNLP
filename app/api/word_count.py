@@ -15,7 +15,7 @@ class WordCountRequest(BaseModel):
     text: str
 
 #ToDo cambiar para que maneje file uploads
-@router.post("/word-count")
+@router.post("/")
 def word_count(req: WordCountRequest, background_tasks: BackgroundTasks):
     request_id = str(uuid.uuid4())
 
