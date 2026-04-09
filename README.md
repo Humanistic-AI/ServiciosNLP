@@ -8,10 +8,14 @@
 # ServiciosNLP
 
 ServiciosNLP is an educational backend platform built with **Python** and **FastAPI**.
-
-It provides NLP-based services for humanities researchers, including word frequency analysis, sentence classification, and document clustering, through a clean, documented REST API.
-
+It provides NLP-based services for humanities researchers — including word frequency analysis, sentence classification, and document clustering — through a clean, documented REST API.
 The project grows incrementally, starting with basic text processing and progressively integrating LLM-powered features via the OpenAI API.
+
+---
+
+## Screenshot
+
+<img width="1290" height="763" alt="Screenshot 2026-04-09 at 1 14 21 p m" src="https://github.com/user-attachments/assets/0aa4fa4d-f36c-487e-8e18-e3310f6ad5b5" />
 
 ---
 
@@ -26,6 +30,7 @@ The project grows incrementally, starting with basic text processing and progres
 - Asynchronous task handling using FastAPI's **BackgroundTasks**
 - Fully containerized with **Docker**
 - Version-controlled with **Git & GitHub** using feature branches and pull requests
+- React + TypeScript frontend with Vite and Tailwind CSS
 
 ---
 
@@ -54,22 +59,40 @@ The classification service builds prompts dynamically at runtime. The **system p
 - Containerization with Docker and hot reload in development
 - Environment variable management with `.env` files
 - Git branching workflow with feature branches and pull requests
+- React component architecture with single responsibility principle
+- TypeScript interfaces and types for frontend data modeling
+- Responsive two-column layout with Tailwind CSS
+- Progressive disclosure UI pattern
+- Async job polling from the frontend
 
 ---
 
 ## Project structure
 
 ```bash
-app/
-├── main.py                        → FastAPI entry point, router registration
-├── api/
-│   ├── health.py                  → Health check endpoint
-│   ├── word_count.py              → Word count endpoints (POST, GET status, GET results)
-│   └── sentence_classification.py → Sentence classification endpoints
-└── core/
-    ├── word_count.py              → NLP logic: normalization, stopword filtering, counting
-    ├── sentence_classification.py → LLM prompt construction and classification logic
-    └── export.py                  → CSV and Excel export utilities
+ServiciosNLP/
+├── app/
+│   ├── main.py                         → FastAPI entry point, router registration
+│   ├── api/
+│   │   ├── health.py                   → Health check endpoint
+│   │   ├── word_count.py               → Word count endpoints (POST, GET status, GET results)
+│   │   └── sentence_classification.py  → Sentence classification endpoints
+│   └── core/
+│       ├── word_count.py               → NLP logic: normalization, stopword filtering, counting
+│       ├── sentence_classification.py  → LLM prompt construction and classification logic
+│       └── export.py                   → CSV and Excel export utilities
+├── frontend/
+│   ├── src/
+│   │   ├── types/                      → TypeScript type definitions
+│   │   ├── services/                   → API communication layer
+│   │   ├── components/                 → Reusable UI components
+│   │   └── App.tsx                     → Root component
+│   ├── package.json                    → Frontend dependencies
+│   └── vite.config.ts                  → Vite and Tailwind configuration
+├── .env                                → Environment variables (not committed)
+├── .env_example                        → Environment variables template
+├── Dockerfile                          → Container configuration
+└── requirements.txt                    → Python dependencies
 ```
 
 ---
@@ -157,7 +180,9 @@ This project is fully containerized. Clone the repository on any machine with Do
 - [x]  Sentence classification with OpenAI and Excel export
 - [x]  Docker volume for NLTK punkt_tab model persistence
 - [x]  CORS configuration
-- [ ]  Basic front-end
+- [x]  React frontend — text input and service selector
+- [ ]  React frontend — analysis history with job status polling
+- [ ]  React frontend — persistent history via backend endpoint
 - [ ]  Named Entity Recognition (NER)
 - [ ]  Document clustering
 - [ ]  Paragraph clustering
