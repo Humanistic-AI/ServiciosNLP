@@ -9,38 +9,32 @@ router = APIRouter()
 datadir = "/tmp/"
 
 
-class ClassRequest(BaseModel):
-    nombre: str
-    descripcion: str
-    ejemplos: str
-
-
 class SentenceClassificationRequest(BaseModel):
     text: str
-    clases: list[ClassRequest]
+    categories: list[str]
+    examples: str
 
-@router.post("/sentence-classification")
+
+@router.post("/")
 def classify(req: SentenceClassificationRequest, background_tasks: BackgroundTasks):
     request_id = str(uuid.uuid4())
     filename = datadir + "result_" + request_id + ".xlsx"
-    
-    clases_dict = [c.model_dump() for c in req.clases]
-    
-    background_tasks.add_task(process_text, req.text, clases_dict, filename)
-    
+
+    background_tasks.add_task(process_text, req.text, req.categories, req.examples, filename)
+
     return {"request_id": request_id, "message": "Processing your request, come back later"}
 
-@router.get("/sentence-classification/status/{request_id}")
+
+@router.get("/status/{request_id}")
 def get_status(request_id: str):
+    import os
     filename = datadir + "result_" + request_id + ".xlsx"
-    try:
-        with open(filename, "r") as fin:
-            return {"request_id": request_id, "status": "completed"}
-    except FileNotFoundError:
-        return {"request_id": request_id, "status": "pending"}
+    if os.path.exists(filename):
+        return {"request_id": request_id, "status": "completed"}
+    return {"request_id": request_id, "status": "pending"}
 
 
-@router.get("/sentence-classification/results/{request_id}")
+@router.get("/results/{request_id}")
 def get_results(request_id: str):
     filename = datadir + "result_" + request_id + ".xlsx"
     try:
