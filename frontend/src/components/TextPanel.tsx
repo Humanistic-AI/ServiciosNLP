@@ -25,56 +25,49 @@ export default function TextPanel({ onSubmit }: Props) {
     setCategories(prev => prev.filter((_, i) => i !== index))
   }
 
-  async function handleSubmit() {
-  if (text.trim() === '') return
-
-  const createdAt = new Date().toLocaleString('es-MX')
-
-  if (service === 'word_count') {
-    const job = await submitWordCount(text)
-    
-    onSubmit({
-      request_id: job.request_id,
-      service,
-      text,
-      status: 'processing',
-      createdAt,
-    })
-
-    setTimeout(async () => {
-      const updated = await checkStatus(service, job.request_id)
-      onSubmit({
-        request_id: job.request_id,
-        service,
-        text,
-        status: updated.status,
-        createdAt,
-      })
-    }, 5000)
-
-  } else {
-    const job = await submitClassification(text, categories, examples)
-
-    onSubmit({
-      request_id: job.request_id,
-      service,
-      text,
-      status: 'processing',
-      createdAt,
-    })
-
-    setTimeout(async () => {
-      const updated = await checkStatus(service, job.request_id)
-      onSubmit({
-        request_id: job.request_id,
-        service,
-        text,
-        status: updated.status,
-        createdAt,
-      })
-    }, 5000)
+  function pollStatus(requestId: string, submittedService: ServiceType, submittedText: string, createdAt: string) {
+    const interval = setInterval(async () => {
+      const updated = await checkStatus(submittedService, requestId)
+      if (updated.status === 'completed' || updated.status === 'failed') {
+        clearInterval(interval)
+        onSubmit({
+          request_id: requestId,
+          service: submittedService,
+          text: submittedText,
+          status: updated.status,
+          createdAt,
+        })
+      }
+    }, 3000)
   }
-}
+
+  async function handleSubmit() {
+    if (text.trim() === '') return
+
+    const createdAt = new Date().toLocaleString('es-MX')
+    const submittedText = text
+    const submittedService = service
+
+    const job =
+      submittedService === 'word_count'
+        ? await submitWordCount(submittedText)
+        : await submitClassification(submittedText, categories, examples)
+
+    onSubmit({
+      request_id: job.request_id,
+      service: submittedService,
+      text: submittedText,
+      status: 'processing',
+      createdAt,
+    })
+
+    setText('')
+    setCategories([])
+    setCategoryInput('')
+    setExamples('')
+
+    pollStatus(job.request_id, submittedService, submittedText, createdAt)
+  }
 
   return (
     <div className="bg-white border border-gray-200 rounded-xl p-5 flex flex-col gap-4">
@@ -82,7 +75,6 @@ export default function TextPanel({ onSubmit }: Props) {
         Panel de trabajo
       </p>
 
-      {/* Selector de servicio */}
       <div className="flex gap-2">
         <button
           onClick={() => setService('word_count')}
@@ -106,7 +98,6 @@ export default function TextPanel({ onSubmit }: Props) {
         </button>
       </div>
 
-      {/* Textarea principal */}
       <textarea
         value={text}
         onChange={e => setText(e.target.value)}
@@ -115,7 +106,6 @@ export default function TextPanel({ onSubmit }: Props) {
         className="w-full border border-gray-200 rounded-lg p-3 text-sm text-gray-700 resize-none focus:outline-none focus:ring-1 focus:ring-gray-300"
       />
 
-      {/* Campos extra para clasificación */}
       {service === 'sentence_classification' && (
         <div className="flex flex-col gap-3">
           <div>
@@ -162,7 +152,6 @@ export default function TextPanel({ onSubmit }: Props) {
         </div>
       )}
 
-      {/* Botón */}
       <button
         onClick={handleSubmit}
         disabled={text.trim() === ''}
